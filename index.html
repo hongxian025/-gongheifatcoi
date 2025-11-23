@@ -1,6 +1,6 @@
-<html>
+<html lang="zh-CN">
     <head>
-        <title>放烟花</title>
+        <title>恭喜发财！</title>
         <style type="text/css">
             html,body{
                 padding: 0;
@@ -12,14 +12,149 @@
             position:relative;
             top:30%;
             }
-            .music{
-                width: 100%;
+        </style>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            /* 隐藏原生音频标签，但我们仍然需要它 */
+            #myAudio {
+                display: none;
             }
+
+            /* 自定义播放器样式 */
+            .control-btn {
+                width: 60px;
+                height: 60px;
+                border: none;
+                cursor: pointer;
+                background-size: contain;
+                background-repeat: no-repeat;
+                background-position: center;
+                background-color: transparent;
+                /* 默认显示播放图标 */
+                background-image: url('play.png');
+            }
+
+            /* 播放状态时显示暂停图标 */
+            .control-btn.playing {
+                background-image: url('pause.png');
+            }
+            
+            .tooltip-bubble {
+                position: fixed;
+                top: 8px;
+                left: 66px;
+                background:#f1f1f1;
+                color: #FF5C3A;
+                padding: 11px 17px;
+                border-radius: 25px;
+                font-size: 15px;
+                font-weight: 800;
+                z-index: 999;
+                animation: bounce 2s infinite;
+            }
+
+            /* 提示框小箭头 */
+            .tooltip-bubble::before {
+                content: '';
+                position: absolute;
+                left: -13px;
+                top: 50%;
+                transform: translateY(-50%);
+                border: 8px solid transparent;
+                border-right-color: #f1f1f1;
+            }
+
+            @keyframes bounce {
+                0%, 100% { transform: translateX(0); }
+                50% { transform: translateX(5px); }
+            }
+            
+            /* 淡出动画 */
+            @keyframes fadeOut {
+                from { opacity: 1; }
+                to { opacity: 0; }
+            }
+
+            .tooltip-bubble.hidden {
+                display: none;
+            }
+
         </style>
     </head>
+
     <body>
-        <audio src="刘德华-恭喜发财.mp3" autoplay="autoplay" loop controls class="music"></audio>
+        <!DOCTYPE html>
+
+        <!-- 原生音频标签，用于提供音频功能 -->
+        <audio id="myAudio" loop>
+            <source src="刘德华-恭喜发财.mp3" type="audio/mpeg">
+            您的浏览器不支持音频元素。
+        </audio>
+
+        <!-- 自定义播放器UI -->
+        <div class="custom-player">
+            <button class="control-btn" id="playPauseBtn">
+            </button>
+        
+        </div>
+
+        <div class="tooltip-bubble" id="tooltip">点击过年🎵</div>
+
+        <script>
+        const playButton = document.getElementById('playButton');
+        const tooltip = document.getElementById('tooltip');
+        const audio = document.getElementById('myAudio');
+
+
+        // 隐藏提示框的函数
+        function hideTooltip() {
+            tooltip.style.animation = 'fadeOut 0.5s ease-out';
+            setTimeout(() => {
+                tooltip.classList.add('hidden');
+            }, 500);
+        }
+
+        //3秒后自动淡出提示（如果用户不点击）
+        setTimeout(() => {
+            if (!tooltip.classList.contains('hidden')) {
+                hideTooltip();
+            }
+        }, 3000);
+
+
+        // 更新播放/暂停按钮和图标
+        function updateButton() {
+            if (audio.paused) {
+                playPauseBtn.classList.remove('playing');
+            } else {
+                playPauseBtn.classList.add('playing');
+            }
+        }
+
+        // 点击播放/暂停
+        playPauseBtn.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play().then(() => {
+                    // 播放成功，隐藏提示
+                    hideTooltip();
+                }).catch(error => {
+                    console.log('播放失败:', error);
+                });
+            } else {
+                audio.pause();
+            }
+            updateButton();
+        });
+
+        // 播放/暂停时更新按钮
+        audio.addEventListener('play', updateButton);
+        audio.addEventListener('pause', updateButton);
+
+        </script>
+
         <img src="窗花全图.png" width="100%" id="chuanghua">
+
         <script>
             !(function () {
                 var canvas = document.createElement("canvas");//创建canvas标签，名为canvas
@@ -58,7 +193,7 @@
                     var x = e.clientX;
                     var y = e.clientY;
 
-                    createFireworks(x, y,/*["杨幂","我爱你","永远"][Math.floor(Math.random()*3)]*/);
+                    createFireworks(x, y,);
                 }
                 document.addEventListener("mousedown", mouseDownHandler);
 
